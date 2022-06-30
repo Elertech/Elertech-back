@@ -91,6 +91,12 @@
    		</dependency>
 		<!-- /Dependencia para o swagger -->
 		
+		<!-- Dependencia do heroku -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
+		<!-- Dependencia do heroku -->
 	</dependencies>
 
 	<build>

@@ -37,7 +37,6 @@ public class Endereco {
 		this.id = id;
 		this.endereco = endereco;
 		this.cep = cep;
-		this.usuario = usuario;
 	}
 	
 	public Endereco() {
