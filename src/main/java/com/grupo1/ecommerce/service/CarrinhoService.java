@@ -18,8 +18,8 @@ public class CarrinhoService {
 	
 	public ResponseEntity <List<Carrinho>> fazerPedido(List<Carrinho> carrinho){
 		carrinho.forEach((item) -> {
-			Optional<Carrinho> car = carrinhoRepository.findById(item.getId());
-			car.get().setStatus("pedido");
+			Optional<Carrinho> carrinhoPedido = carrinhoRepository.findById(item.getId());
+			carrinhoPedido.get().setStatus("pedido");
 			carrinhoRepository.save(item);
 		});
 		return ResponseEntity.ok(carrinho);
