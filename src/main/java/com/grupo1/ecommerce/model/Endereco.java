@@ -37,7 +37,6 @@ public class Endereco {
 		this.id = id;
 		this.endereco = endereco;
 		this.cep = cep;
-
 	}
 	
 	public Endereco() {
@@ -75,7 +74,4 @@ public class Endereco {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-
-
-
 }
