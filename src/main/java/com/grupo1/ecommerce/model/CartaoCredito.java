@@ -10,6 +10,8 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name = "tb_cartao_credito", uniqueConstraints = {@UniqueConstraint(columnNames = {"numeroCartao"})})
@@ -39,17 +41,18 @@ public class CartaoCredito {
 	private String cvv;
 	
 	@ManyToOne
-	//@JsonIgnoreProperties("cartaoCredito")
+	@JsonIgnoreProperties("cartaoCredito")
 	private Usuario usuario;
 
 	
-	public CartaoCredito(Long id, String apelido, String nomeCartao, String numeroCartao, String dataValidade, String cvv) {
+	public CartaoCredito(Long id, String apelido, String nomeCartao, String numeroCartao, String dataValidade, String cvv, Usuario usuario) {
 		this.id = id;
 		this.apelido = apelido;
 		this.nomeCartao = nomeCartao;
 		this.numeroCartao = numeroCartao;
 		this.dataValidade = dataValidade;
 		this.cvv = cvv;
+		this.usuario = usuario;
 	}
 	
 	public CartaoCredito() {
