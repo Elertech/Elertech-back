@@ -30,8 +30,4 @@ public class EnderecoService {
     public List<Endereco> obterEnderecoUsuario(Long idUsuario){
         return enderecoRepository.findAllEnderecoUsuario(idUsuario);
     }
-
-    // public ResponseEntity<Endereco> atualizarEndereco(Endereco endereco){
-    //     Endereco enderecoAtualizar = enderecoRepository.findById(endereco.getId()).get();
-    // }
 }
