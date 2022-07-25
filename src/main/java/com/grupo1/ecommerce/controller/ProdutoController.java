@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.grupo1.ecommerce.model.Produto;
 import com.grupo1.ecommerce.repository.ProdutoRepository;
+import com.grupo1.ecommerce.service.ProdutoService;
 
 @RestController
 @RequestMapping(value = "/produto")
@@ -25,6 +26,9 @@ public class ProdutoController {
 	
 	@Autowired
 	private ProdutoRepository repository;
+
+	@Autowired
+	private ProdutoService produtoService;
 	
 	@GetMapping 
 	public List<Produto> findAll(){
@@ -46,7 +50,7 @@ public class ProdutoController {
 	
 	@PostMapping("/cadastrar")
 	public ResponseEntity<Produto> post(@RequestBody Produto produto){
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(produto));
+		return produtoService.cadastrarNovoProduto(produto);
 	}
 	
 	@PutMapping("/atualizar")
