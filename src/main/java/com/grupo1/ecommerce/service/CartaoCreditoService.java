@@ -24,6 +24,7 @@ public class CartaoCreditoService {
     public ResponseEntity<CartaoCredito> cadastrarNovoCartao(CartaoCredito cartao, Long idUsuario){
         Usuario usuario = usuarioRepository.findById(idUsuario).get();
         cartao.setUsuario(usuario);
+        cartao.setNomeCartao(cartao.getNomeCartao().toUpperCase());
        return ResponseEntity.status(HttpStatus.CREATED).body(cartaoRepository.save(cartao));
     }
 
