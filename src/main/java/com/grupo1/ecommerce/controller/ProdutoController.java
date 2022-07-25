@@ -3,7 +3,6 @@ package com.grupo1.ecommerce.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -44,8 +43,13 @@ public class ProdutoController {
 	}
 	
 	@GetMapping("/pesquisar/{nome}")
-	public ResponseEntity<List<Produto>> GetByNome(@PathVariable String nome) {
+	public ResponseEntity<List<Produto>> getByNome(@PathVariable String nome) {
 		return ResponseEntity.ok(repository.findAllByNomeContainingIgnoreCase(nome));
+	}
+
+	@GetMapping("/pesquisar/categoria/{idCategoria}")
+	public List<Produto> getByCategoria(@PathVariable Long idCategoria) {
+		return produtoService.buscarProdutoPorCategoria(idCategoria);
 	}
 	
 	@PostMapping("/cadastrar")
