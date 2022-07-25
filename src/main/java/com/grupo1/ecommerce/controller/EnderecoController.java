@@ -3,7 +3,6 @@ package com.grupo1.ecommerce.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.grupo1.ecommerce.model.Endereco;
 import com.grupo1.ecommerce.repository.EnderecoRepository;
+import com.grupo1.ecommerce.service.EnderecoService;
 
 @RestController
 @RequestMapping(value = "/endereco")
@@ -24,33 +24,37 @@ import com.grupo1.ecommerce.repository.EnderecoRepository;
 public class EnderecoController {
 	
 	@Autowired
-	private EnderecoRepository repository;
+	private EnderecoRepository enderecoRepository;
+
+	@Autowired
+    private EnderecoService enderecoService;
+
 	
-	@GetMapping 
-	public List<Endereco> findAll(){
-		List<Endereco> lista = repository.findAll();
-		return lista;
+	@GetMapping("buscar/user/{idUsuario}")
+	public List<Endereco> findAll(@PathVariable Long idUsuario){
+		return enderecoService.obterEnderecoUsuario(idUsuario);
 	}
+
 	@GetMapping("/{id}")
 	public ResponseEntity<Endereco> getById(@PathVariable Long id){
-	    return repository.findById(id)
+	    return enderecoRepository.findById(id)
 	    		.map(resp -> ResponseEntity.ok(resp))
 	            .orElse(ResponseEntity.notFound().build());
 	}
 
-	@PostMapping("/cadastrar")
-	public ResponseEntity<Endereco> post(@RequestBody Endereco endereco){
-	    return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(endereco));
+	@PostMapping("/cadastrar/user/{idUsuario}")
+	public ResponseEntity<Endereco> post(@RequestBody Endereco endereco, @PathVariable Long idUsuario){
+	    return enderecoService.cadastrarNovoEndereco(endereco, idUsuario);
 	}
 
 	@PutMapping("/atualizar")
 	public ResponseEntity<Endereco> put(@RequestBody Endereco endereco){
-	    return ResponseEntity.ok(repository.save(endereco));
+	    return ResponseEntity.ok(enderecoRepository.save(endereco));
 	}
 	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
-	        repository.deleteById(id);
+		enderecoRepository.deleteById(id);
 	}
 
 }
