@@ -10,8 +10,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.grupo1.ecommerce.model.Carrinho;
 import com.grupo1.ecommerce.model.Usuario;
 import com.grupo1.ecommerce.model.UsuarioLogin;
+import com.grupo1.ecommerce.repository.CarrinhoRepository;
 import com.grupo1.ecommerce.repository.UsuarioRepository;
 
 @Service
@@ -19,12 +21,21 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+
+	@Autowired
+	private CarrinhoService carrinhoService;
 	
 	public Optional<Usuario> cadastrarUsuario(Usuario usuario) {
-		if (usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent())
+
+		if (usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent()){
 			return Optional.empty();
-		usuario.setSenha(criptografarSenha(usuario.getSenha()));
-		return Optional.of(usuarioRepository.save(usuario));
+		} else {
+			usuario.setSenha(criptografarSenha(usuario.getSenha()));
+			usuarioRepository.save(usuario);
+			carrinhoService.criarCarrinho(usuario);
+			return Optional.of(usuario);
+		}
+
 	}
 	
 	public Optional<Usuario> atualizarUsuario(Usuario usuario) {

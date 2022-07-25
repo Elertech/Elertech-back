@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -51,30 +52,34 @@ public class Usuario {
     @JsonIgnoreProperties("usuario")
 	private List <CartaoCredito> cartaoCredito;
     
-    @OneToMany(mappedBy="usuario", cascade = CascadeType.REMOVE)
-    @JsonIgnoreProperties("usuario")
-    private List<Carrinho> carrinho;
+    @OneToOne
+	@JsonIgnoreProperties("usuario")
+    private Carrinho carrinho;
     
     @OneToMany(mappedBy="usuario", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties("usuario")
-    private List <Endereco> endereco;
-	
-	public Usuario(long id,String usuario, String senha, String foto, String nomeFantasia, String cnpj, String razaoSocial, String tipo) {
+    private List<Endereco> endereco;
+
+	public Usuario(Long id, String usuario,
+			String nomeFantasia, String razaoSocial,
+			String cnpj, String senha, String foto,
+			String tipo, List<CartaoCredito> cartaoCredito, Carrinho carrinho,
+			List<Endereco> endereco) {
 		this.id = id;
 		this.usuario = usuario;
-		this.senha = senha;
-		this.foto = foto;
 		this.nomeFantasia = nomeFantasia;
 		this.razaoSocial = razaoSocial;
 		this.cnpj = cnpj;
+		this.senha = senha;
+		this.foto = foto;
 		this.tipo = tipo;
-	}
-	
-	public Usuario()
-	{
-		
+		this.cartaoCredito = cartaoCredito;
+		this.carrinho = carrinho;
+		this.endereco = endereco;
 	}
 
+	public Usuario() {
+	}
 
 	public Long getId() {
 		return id;
@@ -90,46 +95,6 @@ public class Usuario {
 
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
-	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-	public String getFoto() {
-		return foto;
-	}
-
-	public void setFoto(String foto) {
-		this.foto = foto;
-	}
-
-	public List<CartaoCredito> getCartaoCredito() {
-		return cartaoCredito;
-	}
-
-	public void setCartaoCredito(List<CartaoCredito> cartaoCredito) {
-		this.cartaoCredito = cartaoCredito;
-	}
-
-	public List<Carrinho> getCarrinho() {
-		return carrinho;
-	}
-
-	public void setCarrinho(List<Carrinho> carrinho) {
-		this.carrinho = carrinho;
-	}
-
-	public List<Endereco> getEndereco() {
-		return endereco;
-	}
-
-	public void setEndereco(List<Endereco> endereco) {
-		this.endereco = endereco;
 	}
 
 	public String getNomeFantasia() {
@@ -156,12 +121,52 @@ public class Usuario {
 		this.cnpj = cnpj;
 	}
 
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
 	public String getTipo() {
 		return tipo;
 	}
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+
+	public List<CartaoCredito> getCartaoCredito() {
+		return cartaoCredito;
+	}
+
+	public void setCartaoCredito(List<CartaoCredito> cartaoCredito) {
+		this.cartaoCredito = cartaoCredito;
+	}
+
+	public Carrinho getCarrinho() {
+		return carrinho;
+	}
+
+	public void setCarrinho(Carrinho carrinho) {
+		this.carrinho = carrinho;
+	}
+
+	public List<Endereco> getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(List<Endereco> endereco) {
+		this.endereco = endereco;
 	}
 
 	

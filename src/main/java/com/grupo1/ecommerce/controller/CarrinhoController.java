@@ -3,15 +3,11 @@ package com.grupo1.ecommerce.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,52 +17,42 @@ import com.grupo1.ecommerce.service.CarrinhoService;
 
 @RestController
 @RequestMapping(value = "/carrinho")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class CarrinhoController {
 	
 	@Autowired
-	private CarrinhoRepository repository;
+	private CarrinhoRepository carrinhoRepository;
 	
 	@Autowired
 	private CarrinhoService carrinhoService;
 	
 	@GetMapping 
 	public List<Carrinho> findAll(){
-		List<Carrinho> lista = repository.findAll();
+		List<Carrinho> lista = carrinhoRepository.findAll();
 		return lista;
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Carrinho> getById(@PathVariable Long id){
-		return repository.findById(id)
-				.map(resp -> ResponseEntity.ok(resp))
-				.orElse(ResponseEntity.notFound().build());
-	}
-	
-	@GetMapping("/{status}")
-	public ResponseEntity<List<Carrinho>> GetByStatus(@PathVariable String status) {
-		return ResponseEntity.ok(repository.findAllByStatusContainingIgnoreCase(status));
-	}
-	
-	@PostMapping("/adicionar")
-	public ResponseEntity<Carrinho> post(@RequestBody Carrinho carrinho){
-		return  ResponseEntity.status(HttpStatus.CREATED).body(repository.save(carrinho));
-	}
-	
-	@PutMapping("/atualizar")
-	public ResponseEntity<Carrinho> put(@RequestBody Carrinho carrinho){
-		return ResponseEntity.ok(repository.save(carrinho));
-	}
-	
-	@PutMapping("/pedido")
-	public ResponseEntity <List<Carrinho>> fazerPedido(@RequestBody List<Carrinho> carrinho){
-		return carrinhoService.fazerPedido(carrinho);
-				
+		carrinhoService.calcularCarrinho(id);
+		return carrinhoRepository.findById(id)
+			.map(resp -> ResponseEntity.ok(resp))
+			.orElse(ResponseEntity.notFound().build());
 	}
 
-	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Long id) {
-		repository.deleteById(id);
+	@GetMapping("/{idCarrinho}/adicionar/produto/{idProduto}/quantidade/{quantidade}")
+	public ResponseEntity<Carrinho> getById(@PathVariable Long idCarrinho, @PathVariable Long idProduto, @PathVariable int quantidade){
+		return carrinhoService.adicionarItem(idProduto, idCarrinho, quantidade);
+	}
+
+	@DeleteMapping("/{idCarrinho}/deleteitem/{idItem}")
+	public void delete(@PathVariable Long idCarrinho, @PathVariable Long idItem) {
+		carrinhoService.deletarItemDoCarrinho(idCarrinho, idItem);
+	}
+
+	@DeleteMapping("/limpar/{idCarrinho}")
+	public void clear(@PathVariable Long idCarrinho) {
+		carrinhoService.limparCarrinho(idCarrinho);
 	}
 
 }
