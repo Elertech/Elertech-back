@@ -52,14 +52,14 @@ public class ProdutoController {
 		return produtoService.buscarProdutoPorCategoria(idCategoria);
 	}
 	
-	@PostMapping("/cadastrar")
-	public ResponseEntity<Produto> post(@RequestBody Produto produto){
-		return produtoService.cadastrarNovoProduto(produto);
+	@PostMapping("/cadastrar/categoria/{idCategoria}")
+	public ResponseEntity<Produto> post(@RequestBody Produto produto, @PathVariable Long idCategoria){
+		return produtoService.cadastrarNovoProduto(produto, idCategoria);
 	}
 	
-	@PutMapping("/atualizar")
-	public ResponseEntity<Produto> put(@RequestBody Produto produto){
-		return ResponseEntity.ok(repository.save(produto));
+	@PutMapping("/atualizar/categoria/{idCategoria}")
+	public ResponseEntity<Produto> put(@RequestBody Produto produto, @PathVariable Long idCategoria){
+		return produtoService.atualizarProduto(produto, idCategoria);
 	}
 
 	@DeleteMapping("/{id}")
