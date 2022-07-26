@@ -74,14 +74,14 @@ public class CarrinhoService {
 		item.setQuantidade(quantidade);
 		item.setValorTotal(produto.getPreco() * quantidade);
 		itemRepository.save(item);
-		atualizarEstoqueAoAdicionar(produto, item);
+		atualizarEstoqueAoAdicionar(produto, quantidade);
 	}
 
 	public void produtoExistente(Produto produto, Item itemRepetido, int quantidade){
 		itemRepetido.setQuantidade(itemRepetido.getQuantidade() + quantidade);
 		itemRepetido.setValorTotal(itemRepetido.getProduto().getPreco() * itemRepetido.getQuantidade());
 		itemRepository.save(itemRepetido);
-		atualizarEstoqueAoAdicionar(produto, itemRepetido);
+		atualizarEstoqueAoAdicionar(produto, quantidade);
 	}	
 
 	public void calcularCarrinho(Long idCarrinho){
@@ -119,8 +119,8 @@ public class CarrinhoService {
 		calcularCarrinho(idCarrinho);
 	}
 
-	public void atualizarEstoqueAoAdicionar(Produto produto, Item item){
-		produto.setEstoque(produto.getEstoque() - item.getQuantidade());
+	public void atualizarEstoqueAoAdicionar(Produto produto, int quantidade){
+		produto.setEstoque(produto.getEstoque() - quantidade);
 		produtoRepository.save(produto);
 	}
 
