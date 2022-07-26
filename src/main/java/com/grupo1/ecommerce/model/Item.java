@@ -32,12 +32,17 @@ public class Item {
     @JsonIgnoreProperties(value = "item")
     private Carrinho carrinho;
 
-    public Item(Long id, int quantidade, double valorTotal, Produto produto, Carrinho carrinho) {
+    @ManyToOne
+    @JsonIgnoreProperties(value = "item")
+    private Pedido pedido;
+
+    public Item(Long id, int quantidade, double valorTotal, Produto produto, Carrinho carrinho, Pedido pedido) {
         this.id = id;
         this.quantidade = quantidade;
         this.valorTotal = valorTotal;
         this.produto = produto;
         this.carrinho = carrinho;
+        this.pedido = pedido;
     }
 
     public Item() {
@@ -83,5 +88,12 @@ public class Item {
         this.carrinho = carrinho;
     }
 
-    
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
+    }
+
 }

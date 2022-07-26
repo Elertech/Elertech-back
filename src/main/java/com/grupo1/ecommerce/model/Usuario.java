@@ -50,7 +50,7 @@ public class Usuario {
 		
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties("usuario")
-	private List <CartaoCredito> cartaoCredito;
+	private List<CartaoCredito> cartaoCredito;
     
     @OneToOne
 	@JsonIgnoreProperties("usuario")
@@ -60,11 +60,15 @@ public class Usuario {
     @JsonIgnoreProperties("usuario")
     private List<Endereco> endereco;
 
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
+    @JsonIgnoreProperties("usuario")
+	private List<Pedido> pedido;
+
 	public Usuario(Long id, String usuario,
 			String nomeFantasia, String razaoSocial,
 			String cnpj, String senha, String foto,
 			String tipo, List<CartaoCredito> cartaoCredito, Carrinho carrinho,
-			List<Endereco> endereco) {
+			List<Endereco> endereco, List<Pedido> pedido) {
 		this.id = id;
 		this.usuario = usuario;
 		this.nomeFantasia = nomeFantasia;
@@ -76,6 +80,7 @@ public class Usuario {
 		this.cartaoCredito = cartaoCredito;
 		this.carrinho = carrinho;
 		this.endereco = endereco;
+		this.pedido = pedido;
 	}
 
 	public Usuario() {
@@ -169,5 +174,14 @@ public class Usuario {
 		this.endereco = endereco;
 	}
 
+	public List<Pedido> getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(List<Pedido> pedido) {
+		this.pedido = pedido;
+	}
+
+	
 	
 }
