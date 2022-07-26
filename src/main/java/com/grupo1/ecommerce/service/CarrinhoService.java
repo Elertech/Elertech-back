@@ -56,13 +56,14 @@ public class CarrinhoService {
 			}
 
 			if(controleItemRepetido == true){
-				produtoexistente(itemRepetido, quantidade);
+				produtoExistente(produto, itemRepetido, quantidade);
 			} else {
 				produtoNovo(produto, carrinho, quantidade);
 			}
 			controleItemRepetido = false;
 		}
 		calcularCarrinho(carrinho.getId());
+		
 		return ResponseEntity.ok(carrinhoRepository.save(carrinho));
 	}
 
@@ -73,12 +74,14 @@ public class CarrinhoService {
 		item.setQuantidade(quantidade);
 		item.setValorTotal(produto.getPreco() * quantidade);
 		itemRepository.save(item);
+		atualizarEstoqueAoAdicionar(produto, item);
 	}
 
-	public void produtoexistente(Item itemRepetido, int quantidade){
+	public void produtoExistente(Produto produto, Item itemRepetido, int quantidade){
 		itemRepetido.setQuantidade(itemRepetido.getQuantidade() + quantidade);
 		itemRepetido.setValorTotal(itemRepetido.getProduto().getPreco() * itemRepetido.getQuantidade());
 		itemRepository.save(itemRepetido);
+		atualizarEstoqueAoAdicionar(produto, itemRepetido);
 	}	
 
 	public void calcularCarrinho(Long idCarrinho){
@@ -100,14 +103,30 @@ public class CarrinhoService {
 	}
 
 	public void deletarItemDoCarrinho(Long idCarrinho, Long idItem){
-		itemRepository.deleteById(idItem);
+		Item item = itemRepository.findById(idItem).get();
+		atualizarEstoqueAoExcluir(item.getProduto(), item);
+		itemRepository.delete(item);
 		calcularCarrinho(idCarrinho);
 	}
 
 	public void limparCarrinho(Long idCarrinho){
 		Carrinho carrinho = carrinhoRepository.findById(idCarrinho).get();
+		List<Item> listItem = carrinho.getItem();
+		for(Item item : listItem){
+			atualizarEstoqueAoExcluir(item.getProduto(), item);
+		}
 		itemRepository.deleteAll(carrinho.getItem());
 		calcularCarrinho(idCarrinho);
+	}
+
+	public void atualizarEstoqueAoAdicionar(Produto produto, Item item){
+		produto.setEstoque(produto.getEstoque() - item.getQuantidade());
+		produtoRepository.save(produto);
+	}
+
+	public void atualizarEstoqueAoExcluir(Produto produto, Item item){
+		produto.setEstoque(produto.getEstoque() + item.getQuantidade());
+		produtoRepository.save(produto);
 	}
 	
 }
