@@ -10,10 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.grupo1.ecommerce.model.Carrinho;
 import com.grupo1.ecommerce.model.Usuario;
 import com.grupo1.ecommerce.model.UsuarioLogin;
-import com.grupo1.ecommerce.repository.CarrinhoRepository;
 import com.grupo1.ecommerce.repository.UsuarioRepository;
 
 @Service

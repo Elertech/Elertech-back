@@ -17,7 +17,7 @@ import com.grupo1.ecommerce.service.CarrinhoService;
 
 @RestController
 @RequestMapping(value = "/carrinho")
-@CrossOrigin(origins = "*")
+@CrossOrigin("*")
 public class CarrinhoController {
 	
 	@Autowired
