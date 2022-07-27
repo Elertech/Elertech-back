@@ -47,10 +47,10 @@ public class Pedido {
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties(value = "pedido")
-    private List<Item> item;
+    private List<ItemPedido> itemPedido;
 
     public Pedido(Long id, int quantidadeItens, double valorTotalPedido, String enderecoEntrega, String formaPagamento,
-    LocalDateTime dataPedido, Usuario usuario, List<Item> item) {
+    LocalDateTime dataPedido, Usuario usuario, List<ItemPedido> itemPedido) {
         this.id = id;
         this.quantidadeItens = quantidadeItens;
         this.valorTotalPedido = valorTotalPedido;
@@ -58,7 +58,7 @@ public class Pedido {
         this.formaPagamento = formaPagamento;
         this.dataPedido = dataPedido;
         this.usuario = usuario;
-        this.item = item;
+        this.itemPedido = itemPedido;
     }
 
     public Pedido() {
@@ -120,12 +120,12 @@ public class Pedido {
         this.usuario = usuario;
     }
 
-    public List<Item> getItem() {
-        return item;
+    public List<ItemPedido> getItem() {
+        return itemPedido;
     }
 
-    public void setItem(List<Item> item) {
-        this.item = item;
+    public void setItem(List<ItemPedido> itemPedido) {
+        this.itemPedido = itemPedido;
     }
 
     
