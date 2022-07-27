@@ -20,16 +20,6 @@ public class CarrinhoService {
 	
 	@Autowired
 	private CarrinhoRepository carrinhoRepository;
-<<<<<<< HEAD
-	
-	public ResponseEntity <List<Carrinho>> fazerPedido(List<Carrinho> carrinho){
-		carrinho.forEach((item) -> {
-			Optional<Carrinho> carrinhoPedido = carrinhoRepository.findById(item.getId());
-			carrinhoPedido.get().setStatus("pedido");
-			carrinhoRepository.save(item);
-		});
-		return ResponseEntity.ok(carrinho);
-=======
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
@@ -46,7 +36,6 @@ public class CarrinhoService {
 		carrinhoRepository.save(carrinho);
 		usuario.setCarrinho(carrinho);
 		usuarioRepository.save(usuario);
->>>>>>> deploy
 	}
 
 	public ResponseEntity<Carrinho> adicionarItem(Long idProduto, Long idCarrinho, int quantidade){
