@@ -20,20 +20,20 @@ public class SwaggerConfiguration {
 	{
 		return new  OpenAPI()
 				.info(new Info()
-					.title("Criação do Ecommerce da empresa Elertech ")
-					.description("Projeto Desenvolvido por : Vinicius Campaguinolli , Guilherme Ariza, "
+					.title("API Ecommerce Elertech")
+					.description("Desenvolvedores: Vinicius Campanholi , Guilherme Ariza, "
 							+ "Vanessa Jesus, Lucas Theberge e Pamela Azevedo")
-					.version("v.0.1")
+					.version("v.2.0")
 				.license(new License()
-					.name("grupo1.ecommerce")
-					.url("https://localholst//8080"))
+					.name("elertech.com")
+					.url("https://elertech.netlify.app"))
 				.contact(new Contact()
 					.name("Vinicius Campanholi, Guilherme Ariza, "
 							+ "Vanessa Jesus, Lucas Theberge e Pamela Azevedo")
 					.email("viniciuscampanholi@ghotmail.com,guilherme.ariza@gmail.com,lucas.theberge@gmail.com"
 							+ "pamela.azevedo@gmail.com")))
 				.externalDocs(new ExternalDocumentation()
-						.description("GitHub")
+						.description("Repositório GitHub")
 						.url("https://github.com/Elertech"));
 						
 	}
