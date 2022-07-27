@@ -22,6 +22,11 @@ public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
 
+    @GetMapping("/{id}")
+    public Pedido getPedidoById(@PathVariable Long id){
+        return pedidoService.getById(id);
+    }
+
     @GetMapping("/usuario/{idUsuario}")
     public List<Pedido> getAllByUsuario(@PathVariable Long idUsuario){
         return pedidoService.pedidosDoUsuario(idUsuario);

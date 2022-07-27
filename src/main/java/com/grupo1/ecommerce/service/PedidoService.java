@@ -1,6 +1,7 @@
 package com.grupo1.ecommerce.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,10 +12,13 @@ import com.grupo1.ecommerce.model.Carrinho;
 import com.grupo1.ecommerce.model.CartaoCredito;
 import com.grupo1.ecommerce.model.Endereco;
 import com.grupo1.ecommerce.model.Item;
+import com.grupo1.ecommerce.model.ItemPedido;
 import com.grupo1.ecommerce.model.Pedido;
 import com.grupo1.ecommerce.model.Usuario;
 import com.grupo1.ecommerce.repository.CartaoCreditoRepository;
 import com.grupo1.ecommerce.repository.EnderecoRepository;
+import com.grupo1.ecommerce.repository.ItemPedidoRepository;
+import com.grupo1.ecommerce.repository.ItemRepository;
 import com.grupo1.ecommerce.repository.PedidoRepository;
 import com.grupo1.ecommerce.repository.UsuarioRepository;
 
@@ -33,28 +37,72 @@ public class PedidoService {
     @Autowired
     private CartaoCreditoRepository cartaoRepository;
 
+    @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
+    private ItemPedidoRepository itemPedidoRepository;
+
+    public Pedido getById(Long id){
+        Optional<Pedido> pedido = pedidoRepository.findById(id);
+        return pedido.get();
+    }
+
     public ResponseEntity<Pedido> fazerPedido(Long idUsuario, Long idEndereco, Long idCartao) {
         Usuario usuario = usuarioRepository.findById(idUsuario).get();
         Endereco endereco = enderecoRepository.findById(idEndereco).get();
         CartaoCredito cartao = cartaoRepository.findById(idCartao).get();
 
         Carrinho carrinho = usuario.getCarrinho();
-        Pedido novoPedido = new Pedido();
-        Pedido pedido = pedidoRepository.save(novoPedido);
 
-        pedido.setEnderecoEntrega(endereco.getEndereco() + " - " + endereco.getCep());
-        pedido.setFormaPagamento(cartao.getApelido() + " - final " + cartao.getNumeroCartao().substring(15, 19));
-        pedido.setUsuario(usuario);
+        Pedido pedido = new Pedido();
+        Pedido novoPedido = pedidoRepository.save(pedido);
+
+        novoPedido.setEnderecoEntrega(endereco.getEndereco() + " - " + endereco.getCep());
+        novoPedido.setFormaPagamento(cartao.getApelido() + " - final " + cartao.getNumeroCartao().substring(15, 19));
+        novoPedido.setUsuario(usuario);
 
         for (Item item : carrinho.getItem()) {
-            item.setCarrinho(null);
-            item.setPedido(pedido);
-            pedido.setQuantidadeItens(pedido.getQuantidadeItens() + item.getQuantidade());
-            pedido.setValorTotalPedido(pedido.getValorTotalPedido() + item.getValorTotal());
+            ItemPedido itemPedido = new ItemPedido();
+            itemPedido.setPedido(novoPedido);
+            itemPedido.setProduto(item.getProduto());
+            itemPedido.setQuantidade(item.getQuantidade());
+            itemPedido.setValorTotal(item.getValorTotal());
+            itemPedidoRepository.save(itemPedido);
+
+            itemRepository.delete(item);
+
+            novoPedido.setQuantidadeItens(novoPedido.getQuantidadeItens() + itemPedido.getQuantidade());
+            novoPedido.setValorTotalPedido(novoPedido.getValorTotalPedido() + itemPedido.getValorTotal());
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoRepository.save(pedido));
+        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoRepository.save(novoPedido));
     }
+
+
+
+    // public ResponseEntity<Pedido> fazerPedido(Long idUsuario, Long idEndereco, Long idCartao) {
+    //     Usuario usuario = usuarioRepository.findById(idUsuario).get();
+    //     Endereco endereco = enderecoRepository.findById(idEndereco).get();
+    //     CartaoCredito cartao = cartaoRepository.findById(idCartao).get();
+
+    //     Carrinho carrinho = usuario.getCarrinho();
+    //     Pedido novoPedido = new Pedido();
+    //     Pedido pedido = pedidoRepository.save(novoPedido);
+
+    //     pedido.setEnderecoEntrega(endereco.getEndereco() + " - " + endereco.getCep());
+    //     pedido.setFormaPagamento(cartao.getApelido() + " - final " + cartao.getNumeroCartao().substring(15, 19));
+    //     pedido.setUsuario(usuario);
+
+    //     for (Item item : carrinho.getItem()) {
+    //         item.setCarrinho(null);
+    //         item.setPedido(pedido);
+    //         pedido.setQuantidadeItens(pedido.getQuantidadeItens() + item.getQuantidade());
+    //         pedido.setValorTotalPedido(pedido.getValorTotalPedido() + item.getValorTotal());
+    //     }
+
+    //     return ResponseEntity.status(HttpStatus.CREATED).body(pedidoRepository.save(pedido));
+    // }
 
     public List<Pedido> pedidosDoUsuario(Long idUsuario) {
         return pedidoRepository.findAllPedidoUsuario(idUsuario);
