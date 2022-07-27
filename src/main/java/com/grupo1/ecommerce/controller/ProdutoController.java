@@ -3,7 +3,6 @@ package com.grupo1.ecommerce.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.grupo1.ecommerce.model.Produto;
 import com.grupo1.ecommerce.repository.ProdutoRepository;
+import com.grupo1.ecommerce.service.ProdutoService;
 
 @RestController
 @RequestMapping(value = "/produto")
@@ -25,6 +25,9 @@ public class ProdutoController {
 	
 	@Autowired
 	private ProdutoRepository repository;
+
+	@Autowired
+	private ProdutoService produtoService;
 	
 	@GetMapping 
 	public List<Produto> findAll(){
@@ -40,18 +43,23 @@ public class ProdutoController {
 	}
 	
 	@GetMapping("/pesquisar/{nome}")
-	public ResponseEntity<List<Produto>> GetByNome(@PathVariable String nome) {
+	public ResponseEntity<List<Produto>> getByNome(@PathVariable String nome) {
 		return ResponseEntity.ok(repository.findAllByNomeContainingIgnoreCase(nome));
 	}
-	
-	@PostMapping("/cadastrar")
-	public ResponseEntity<Produto> post(@RequestBody Produto produto){
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(produto));
+
+	@GetMapping("/pesquisar/categoria/{idCategoria}")
+	public List<Produto> getByCategoria(@PathVariable Long idCategoria) {
+		return produtoService.buscarProdutoPorCategoria(idCategoria);
 	}
 	
-	@PutMapping("/atualizar")
-	public ResponseEntity<Produto> put(@RequestBody Produto produto){
-		return ResponseEntity.ok(repository.save(produto));
+	@PostMapping("/cadastrar/categoria/{idCategoria}")
+	public ResponseEntity<Produto> post(@RequestBody Produto produto, @PathVariable Long idCategoria){
+		return produtoService.cadastrarNovoProduto(produto, idCategoria);
+	}
+	
+	@PutMapping("/atualizar/categoria/{idCategoria}")
+	public ResponseEntity<Produto> put(@RequestBody Produto produto, @PathVariable Long idCategoria){
+		return produtoService.atualizarProduto(produto, idCategoria);
 	}
 
 	@DeleteMapping("/{id}")
