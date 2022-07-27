@@ -29,7 +29,7 @@ public class SwaggerConfiguration {
 					.url("https://localholst//8080"))
 				.contact(new Contact()
 					.name("Vinicius Campanholi, Guilherme Ariza, "
-							+ "Vanessa Jesus, Lucas Theberge, Pamela Azevedo e Lucinao Ferraz ")
+							+ "Vanessa Jesus, Lucas Theberge e Pamela Azevedo")
 					.email("viniciuscampanholi@ghotmail.com,guilherme.ariza@gmail.com,lucas.theberge@gmail.com"
 							+ "pamela.azevedo@gmail.com")))
 				.externalDocs(new ExternalDocumentation()
