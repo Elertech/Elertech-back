@@ -22,7 +22,7 @@ public class SwaggerConfiguration {
 				.info(new Info()
 					.title("Criação do Ecommerce da empresa Elertech ")
 					.description("Projeto Desenvolvido por : Vinicius Campaguinolli , Guilherme Ariza, "
-							+ "Vanessa Jesus, Lucas Theberge, Pamela Azevedo e Lucinao Ferraz ")
+							+ "Vanessa Jesus, Lucas Theberge e Pamela Azevedo")
 					.version("v.0.1")
 				.license(new License()
 					.name("grupo1.ecommerce")
@@ -31,10 +31,10 @@ public class SwaggerConfiguration {
 					.name("Vinicius Campanholi, Guilherme Ariza, "
 							+ "Vanessa Jesus, Lucas Theberge, Pamela Azevedo e Lucinao Ferraz ")
 					.email("viniciuscampanholi@ghotmail.com,guilherme.ariza@gmail.com,lucas.theberge@gmail.com"
-							+ "pamela.azevedo@gmail.com,luciano.ferraz@gmail.com")))
+							+ "pamela.azevedo@gmail.com")))
 				.externalDocs(new ExternalDocumentation()
 						.description("GitHub")
-						.url("https://github.com/ViniciusCampanholi/ecommerce.git"));
+						.url("https://github.com/Elertech"));
 						
 	}
 	
