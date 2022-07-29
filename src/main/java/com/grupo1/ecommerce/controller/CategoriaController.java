@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.grupo1.ecommerce.model.Categoria;
 import com.grupo1.ecommerce.repository.CategoriaRepository;
+import com.grupo1.ecommerce.service.CategoriaService;
 
 @RestController
 @RequestMapping(value = "/categoria")
@@ -25,6 +26,9 @@ public class CategoriaController {
 	
 	@Autowired
 	private CategoriaRepository repository;
+
+	@Autowired
+	private CategoriaService categoriaService;
 	
 	@GetMapping 
 	public List<Categoria> findAll(){
@@ -55,8 +59,8 @@ public class CategoriaController {
 	}
 
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Long id) {
-		repository.deleteById(id);
+	public ResponseEntity<Categoria> delete(@PathVariable Long id) {
+		return categoriaService.deleteCategoria(id);
 	}
 
 }
