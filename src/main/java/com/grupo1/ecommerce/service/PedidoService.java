@@ -56,27 +56,40 @@ public class PedidoService {
         Carrinho carrinho = usuario.getCarrinho();
 
         Pedido pedido = new Pedido();
-        Pedido novoPedido = pedidoRepository.save(pedido);
+        Pedido novoPedido = new Pedido();
+        ResponseEntity <Pedido> resposta;
+        
+        if(!carrinho.getItem().isEmpty()) {
+        	
+            novoPedido = pedidoRepository.save(pedido);
 
-        novoPedido.setEnderecoEntrega(endereco.getEndereco() + " - " + endereco.getCep());
-        novoPedido.setFormaPagamento(cartao.getApelido() + " - final " + cartao.getNumeroCartao().substring(15, 19));
-        novoPedido.setUsuario(usuario);
+            novoPedido.setEnderecoEntrega(endereco.getEndereco() + " - " + endereco.getCep());
+            novoPedido.setFormaPagamento(cartao.getApelido() + " - final " + cartao.getNumeroCartao().substring(15, 19));
+            novoPedido.setUsuario(usuario);
 
-        for (Item item : carrinho.getItem()) {
-            ItemPedido itemPedido = new ItemPedido();
-            itemPedido.setPedido(novoPedido);
-            itemPedido.setProduto(item.getProduto());
-            itemPedido.setQuantidade(item.getQuantidade());
-            itemPedido.setValorTotal(item.getValorTotal());
-            itemPedidoRepository.save(itemPedido);
+            for (Item item : carrinho.getItem()) {
+                ItemPedido itemPedido = new ItemPedido();
+                itemPedido.setPedido(novoPedido);
+                itemPedido.setProduto(item.getProduto());
+                itemPedido.setQuantidade(item.getQuantidade());
+                itemPedido.setValorTotal(item.getValorTotal());
+                itemPedidoRepository.save(itemPedido);
 
-            itemRepository.delete(item);
+                itemRepository.delete(item);
 
-            novoPedido.setQuantidadeItens(novoPedido.getQuantidadeItens() + itemPedido.getQuantidade());
-            novoPedido.setValorTotalPedido(novoPedido.getValorTotalPedido() + itemPedido.getValorTotal());
+                novoPedido.setQuantidadeItens(novoPedido.getQuantidadeItens() + itemPedido.getQuantidade());
+                novoPedido.setValorTotalPedido(novoPedido.getValorTotalPedido() + itemPedido.getValorTotal());
+            }
+            resposta = ResponseEntity.status(HttpStatus.CREATED).body(pedidoRepository.save(novoPedido));
+            
         }
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoRepository.save(novoPedido));
+        else {
+        	System.out.println("Carrinho vazio");
+        	resposta = ResponseEntity.status(HttpStatus.CONFLICT).build(); 
+        	
+        }
+        
+        return resposta;
     }
 
 
