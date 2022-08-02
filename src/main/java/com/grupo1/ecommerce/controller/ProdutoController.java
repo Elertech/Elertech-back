@@ -31,7 +31,7 @@ public class ProdutoController {
 	
 	@GetMapping 
 	public List<Produto> findAll(){
-		List<Produto> lista = repository.findAll();
+		List<Produto> lista = repository.findAllProduto();
 		return lista;
 	}
 	

@@ -13,6 +13,9 @@ import com.grupo1.ecommerce.model.Produto;
 public interface ProdutoRepository extends JpaRepository<Produto, Long>{
 
 	public List<Produto> findAllByNomeContainingIgnoreCase(@Param("nome") String nome);
+
+	@Query(value = "SELECT * FROM tb_produto ORDER BY produto_id ASC", nativeQuery = true)
+	public List<Produto> findAllProduto();
 	
 	@Query(value = "SELECT * FROM tb_produto WHERE categoria_id = ?1", nativeQuery = true)
 	public List<Produto> findByCategoria(Long idCategoria);

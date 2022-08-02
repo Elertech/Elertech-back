@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "tb_item")
-public class Item {
+public class ItemCarrinho {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,7 +32,7 @@ public class Item {
     @JsonIgnoreProperties(value = "item")
     private Carrinho carrinho;
 
-    public Item(Long id, int quantidade, double valorTotal, Produto produto, Carrinho carrinho) {
+    public ItemCarrinho(Long id, int quantidade, double valorTotal, Produto produto, Carrinho carrinho) {
         this.id = id;
         this.quantidade = quantidade;
         this.valorTotal = valorTotal;
@@ -40,7 +40,7 @@ public class Item {
         this.carrinho = carrinho;
     }
 
-    public Item() {
+    public ItemCarrinho() {
     }
 
     public Long getId() {
