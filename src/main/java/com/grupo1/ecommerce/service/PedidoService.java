@@ -11,22 +11,14 @@ import org.springframework.stereotype.Service;
 import com.grupo1.ecommerce.model.Carrinho;
 import com.grupo1.ecommerce.model.CartaoCredito;
 import com.grupo1.ecommerce.model.Endereco;
-<<<<<<< HEAD
-import com.grupo1.ecommerce.model.Item;
-=======
 import com.grupo1.ecommerce.model.ItemCarrinho;
->>>>>>> main
 import com.grupo1.ecommerce.model.ItemPedido;
 import com.grupo1.ecommerce.model.Pedido;
 import com.grupo1.ecommerce.model.Usuario;
 import com.grupo1.ecommerce.repository.CartaoCreditoRepository;
 import com.grupo1.ecommerce.repository.EnderecoRepository;
 import com.grupo1.ecommerce.repository.ItemPedidoRepository;
-<<<<<<< HEAD
-import com.grupo1.ecommerce.repository.ItemRepository;
-=======
 import com.grupo1.ecommerce.repository.ItemCarrinhoRepository;
->>>>>>> main
 import com.grupo1.ecommerce.repository.PedidoRepository;
 import com.grupo1.ecommerce.repository.UsuarioRepository;
 
