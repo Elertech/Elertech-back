@@ -34,14 +34,14 @@ public class Carrinho {
 
 	@OneToMany(mappedBy = "carrinho", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties(value = "carrinho")
-	private List<Item> item;
+	private List<ItemCarrinho> itemCarrinho;
 
-	public Carrinho(Long id, int quantidadeItem, double valorTotalItem, Usuario usuario, List<Item> item) {
+	public Carrinho(Long id, int quantidadeItem, double valorTotalItem, Usuario usuario, List<ItemCarrinho> itemCarrinho) {
 		this.id = id;
 		this.quantidadeItem = quantidadeItem;
 		this.valorTotalItem = valorTotalItem;
 		this.usuario = usuario;
-		this.item = item;
+		this.itemCarrinho = itemCarrinho;
 	}
 
 	public Carrinho() {
@@ -79,12 +79,12 @@ public class Carrinho {
 		this.usuario = usuario;
 	}
 
-	public List<Item> getItem() {
-		return item;
+	public List<ItemCarrinho> getItem() {
+		return itemCarrinho;
 	}
 
-	public void setItem(List<Item> item) {
-		this.item = item;
+	public void setItem(List<ItemCarrinho> itemCarrinho) {
+		this.itemCarrinho = itemCarrinho;
 	}
 
 }

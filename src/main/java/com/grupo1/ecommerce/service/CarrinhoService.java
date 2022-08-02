@@ -7,11 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.grupo1.ecommerce.model.Carrinho;
-import com.grupo1.ecommerce.model.Item;
+import com.grupo1.ecommerce.model.ItemCarrinho;
 import com.grupo1.ecommerce.model.Produto;
 import com.grupo1.ecommerce.model.Usuario;
 import com.grupo1.ecommerce.repository.CarrinhoRepository;
-import com.grupo1.ecommerce.repository.ItemRepository;
+import com.grupo1.ecommerce.repository.ItemCarrinhoRepository;
 import com.grupo1.ecommerce.repository.ProdutoRepository;
 import com.grupo1.ecommerce.repository.UsuarioRepository;
 
@@ -25,7 +25,7 @@ public class CarrinhoService {
 	private ProdutoRepository produtoRepository;
 
 	@Autowired
-	private ItemRepository itemRepository;
+	private ItemCarrinhoRepository itemRepository;
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
@@ -41,17 +41,17 @@ public class CarrinhoService {
 	public ResponseEntity<Carrinho> adicionarItem(Long idProduto, Long idCarrinho, int quantidade){
 		Produto produto = produtoRepository.findById(idProduto).get();
 		Carrinho carrinho = carrinhoRepository.findById(idCarrinho).get();
-		List<Item> listaItem = carrinho.getItem();
+		List<ItemCarrinho> listaItemCarrinho = carrinho.getItem();
 
-		if(listaItem.isEmpty()){
+		if(listaItemCarrinho.isEmpty()){
 			produtoNovo(produto, carrinho, quantidade);
 		} else {
 			boolean controleItemRepetido = false;
-			Item itemRepetido = new Item();
-			for(Item item : listaItem){
-				if(produto.getId() == item.getProduto().getId()){
+			ItemCarrinho itemRepetido = new ItemCarrinho();
+			for(ItemCarrinho itemCarrinho : listaItemCarrinho){
+				if(produto.getId() == itemCarrinho.getProduto().getId()){
 					controleItemRepetido = true;
-					itemRepetido = item;
+					itemRepetido = itemCarrinho;
 				}
 			}
 
@@ -68,16 +68,16 @@ public class CarrinhoService {
 	}
 
 	public void produtoNovo(Produto produto, Carrinho carrinho, int quantidade){
-		Item item = new Item();
-		item.setProduto(produto);
-		item.setCarrinho(carrinho);
-		item.setQuantidade(quantidade);
-		item.setValorTotal(produto.getPreco() * quantidade);
-		itemRepository.save(item);
+		ItemCarrinho itemCarrinho = new ItemCarrinho();
+		itemCarrinho.setProduto(produto);
+		itemCarrinho.setCarrinho(carrinho);
+		itemCarrinho.setQuantidade(quantidade);
+		itemCarrinho.setValorTotal(produto.getPreco() * quantidade);
+		itemRepository.save(itemCarrinho);
 		atualizarEstoqueAoAdicionar(produto, quantidade);
 	}
 
-	public void produtoExistente(Produto produto, Item itemRepetido, int quantidade){
+	public void produtoExistente(Produto produto, ItemCarrinho itemRepetido, int quantidade){
 		itemRepetido.setQuantidade(itemRepetido.getQuantidade() + quantidade);
 		itemRepetido.setValorTotal(itemRepetido.getProduto().getPreco() * itemRepetido.getQuantidade());
 		itemRepository.save(itemRepetido);
@@ -92,9 +92,9 @@ public class CarrinhoService {
 			carrinho.setValorTotalItem(0);
 			carrinho.setQuantidadeItem(0);
 		} else {
-			for(Item item : carrinho.getItem()){
-				quantidadeItens = quantidadeItens + item.getQuantidade();
-				valorTotalItens = valorTotalItens + (item.getProduto().getPreco() * item.getQuantidade());
+			for(ItemCarrinho itemCarrinho : carrinho.getItem()){
+				quantidadeItens = quantidadeItens + itemCarrinho.getQuantidade();
+				valorTotalItens = valorTotalItens + (itemCarrinho.getProduto().getPreco() * itemCarrinho.getQuantidade());
 			}
 			carrinho.setQuantidadeItem(quantidadeItens);
 			carrinho.setValorTotalItem(valorTotalItens);
@@ -103,17 +103,17 @@ public class CarrinhoService {
 	}
 
 	public void deletarItemDoCarrinho(Long idCarrinho, Long idItem){
-		Item item = itemRepository.findById(idItem).get();
-		atualizarEstoqueAoExcluir(item.getProduto(), item);
-		itemRepository.delete(item);
+		ItemCarrinho itemCarrinho = itemRepository.findById(idItem).get();
+		atualizarEstoqueAoExcluir(itemCarrinho.getProduto(), itemCarrinho);
+		itemRepository.delete(itemCarrinho);
 		calcularCarrinho(idCarrinho);
 	}
 
 	public void limparCarrinho(Long idCarrinho){
 		Carrinho carrinho = carrinhoRepository.findById(idCarrinho).get();
-		List<Item> listItem = carrinho.getItem();
-		for(Item item : listItem){
-			atualizarEstoqueAoExcluir(item.getProduto(), item);
+		List<ItemCarrinho> listaItemCarrinho = carrinho.getItem();
+		for(ItemCarrinho itemCarrinho : listaItemCarrinho){
+			atualizarEstoqueAoExcluir(itemCarrinho.getProduto(), itemCarrinho);
 		}
 		itemRepository.deleteAll(carrinho.getItem());
 		calcularCarrinho(idCarrinho);
@@ -124,8 +124,8 @@ public class CarrinhoService {
 		produtoRepository.save(produto);
 	}
 
-	public void atualizarEstoqueAoExcluir(Produto produto, Item item){
-		produto.setEstoque(produto.getEstoque() + item.getQuantidade());
+	public void atualizarEstoqueAoExcluir(Produto produto, ItemCarrinho itemCarrinho){
+		produto.setEstoque(produto.getEstoque() + itemCarrinho.getQuantidade());
 		produtoRepository.save(produto);
 	}
 	
